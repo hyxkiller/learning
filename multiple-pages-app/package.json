@@ -1,9 +1,9 @@
 {
-  "name": "mobx-learning",
+  "name": "multiple-pages-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "react": "^16.4.2",
+    "react": "^16.6.0-alpha.8af6728",
     "react-dom": "^16.4.2",
     "react-scripts": "1.1.4"
   },
