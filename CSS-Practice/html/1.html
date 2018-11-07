@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- <link rel="stylesheet" href="../scss/1.css"> -->
+    <style>
+        /* div {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #333;
+            box-sizing: border-box;
+            /* box-shadow: 80px 80px 0 0 #000; */
+
+        }
+
+        */ .shadow {
+            position: relative;
+            width: 250px;
+            height: 250px;
+        }
+
+        .shadow::before {
+            content: "";
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            top: -50px;
+            left: -50px;
+            box-shadow: 50px 50px #000, 150px 50px #000, 250px 50px #000,
+            50px 100px #000, 150px 100px #000, 250px 100px #000,
+            50px 150px #000, 150px 150px #000, 250px 150px #000,
+            50px 200px #000, 150px 200px #000, 250px 200px #000,
+            50px 250px #000, 150px 250px #000, 250px 250px #000;
+        }
+
+        .gradient {
+            width: 250px;
+            height: 250px;
+            background-size: 100px 100px;
+            background-image: linear-gradient(90deg, #000 0%, #000 50%, #fff 50%, #fff 100%);
+        }
+
+        div {
+            position: relative;
+            width: 37px;
+            height: 218px;
+            background: #fff;
+            filter: drop-shadow(-10px -10px 0 #24f6f0);
+        }
+
+        div::before {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border: 37px solid #fff;
+            border-top: 37px solid transparent;
+            border-radius: 50%;
+            top: 123px;
+            left: -137px;
+            transform: rotate(45deg);
+        }
+
+        div::after {
+            content: "";
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            border: 30px solid #fff;
+            border-right: 30px solid transparent;
+            border-top: 30px solid transparent;
+            border-left: 30px solid transparent;
+            top: -100px;
+            right: -172px;
+            border-radius: 100%;
+            transform: rotate(45deg);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div class="shadow"></div> -->
+    <!-- <div class="gradient"></div> -->
+    <div></div>
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <input type="file" name="" id="image">
+        <label for="image">upload</label>
+    </div>
+</body>
+<script>
+    document.querySelector('#image').addEventListener('change', function (e) {
+        // e.target.files是一个list Array
+        var file = e.target.files[0];
+        var reader = new window.FileReader();
+        reader.readAsDataURL(file)
+        reader.onload = function (ev) {
+            const image = new Image();
+            image.src = ev.target.result;
+            document.querySelector('body').appendChild(image);
+        }
+    })
+</script>
+
+</html>

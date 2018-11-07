@@ -1,0 +1,164 @@
+$square-size: 100vmin / 16;
+$zoom: 1.6;
+$duration: 1.7s;
+$easing: cubic-bezier(0.645, 0.045, 0.355, 1);
+$color-light: #FEFEFE;
+$color-dark: #121212;
+
+@mixin checker($color,
+  $size: $square-size,
+  $move: false
+) {
+  $space: 2 * $size;
+  $bs: ();
+  $a-x: 0;
+  $a-y: 0;
+  $b-x: 0;
+  $b-y: 0;
+  
+  @if $move == x {
+    $a-x: $size;    
+    $b-x: -$size * 2 ;
+  } @else if $move == y {
+    $a-y: $size;
+    $b-y: -$size * 2 ;
+  }
+  
+  @for $i from -4 through 4 {
+    @for $j from -4 through 4 {
+      $x: $space * $i;
+      $y: $space * $j;
+      $bs: append($bs, #{$x $y $color}, comma);
+    }
+  }
+  
+  @for $i from -4 through 4 {
+    @for $j from -4 through 4 {
+      $x: $space * $i + $size + $b-x;
+      $y: $space * $j + $size + $b-y;
+      $bs: append($bs, #{$x $y $color}, comma);
+    }
+  }
+  
+  background: $color;
+  transform:
+    translateX($a-x)
+    translateY($a-y)
+    scale($square-size / $size);
+  box-shadow: $bs;
+}
+
+@keyframes checker {
+  12.5% {
+    transform: scale(0.5);
+    border-radius: 50%;
+    @include checker($color-light, $zoom * $square-size);
+  }
+  25% {
+    transform: scale(0.5);
+    border-radius: 50%;
+    @include checker($color-light, $zoom * $square-size, x);
+  }
+  37.5%, 50% {
+    transform: scale(1);
+    border-radius: 0;
+    @include checker($color-light, $square-size, x);
+  }
+  50.0001% {
+    transform: scale(1);
+    border-radius: 0;
+    @include checker($color-dark, $square-size);
+  }
+  62.5% {
+    transform: scale(0.5);
+    border-radius: 50%;
+    @include checker($color-dark, $zoom * $square-size);
+  }
+  75% {
+    transform: scale(0.5);
+    border-radius: 50%;
+    @include checker($color-dark, $zoom * $square-size, y);
+  }
+  87.5%, 100% {
+    transform: scale(1);
+    border-radius: 0;
+    @include checker($color-dark, $square-size, y);
+  }
+}
+
+@keyframes zoom {
+  25%, 50% {
+    transform: scale($zoom);
+  }
+  75%, 100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes bg {
+  0%, 50% {
+    background: $color-dark;
+  }
+  100% {
+    background: $color-light;
+  }
+}
+
+div:before {
+  content: '';
+  display: block;
+  transform-origin: center center;
+  width: $square-size;
+  height: $square-size;
+  z-index: 999;
+
+  @include checker($color-light, $square-size);
+}
+
+div {
+  width: $square-size * 16;
+  height: $square-size * 16;
+  transform-origin: center center;
+  animation:
+    zoom $duration $easing forwards infinite,
+    bg $duration * 2 forwards step-start infinite;
+  
+  &:before {
+    animation: checker $duration * 2 $easing infinite;
+    transform-origin: center center;
+  }
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+*, *:before, *:after {
+  position: relative;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100vmin;
+  height: 100vmin;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+div {
+  width: 100vmin;
+  height: 100vmin;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+html {
+  background: $color-light;
+  overflow: hidden;
+}
