@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>IndexedDB</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    const customerData = [{
+            ssn: "444-44-4444",
+            name: "Bill",
+            age: 35,
+            email: "bill@company.com"
+        },
+        {
+            ssn: "555-55-5555",
+            name: "Donna",
+            age: 32,
+            email: "donna@home.org"
+        }
+
+    ];
+    let indexedDB = window.indexedDB.open('home', 2);
+    indexedDB.onerror = function (e) {
+        console.log(e);
+        console.log('open error');
+    }
+    indexedDB.onsuccess = function (e) {
+        console.log(e);
+        console.log('open success');
+        console.log(e.srcElement.result);
+        
+        var db = e.srcElement.result;
+        var transaction = db.transaction(['person'], 'readwrite');
+        var objectStore = transaction.objectStore('person');
+        // var index = objectStore.index('name');
+        // objectStore.add({
+        //     name: 'a',
+        //     age: 10
+        // });
+        // objectStore.add({
+        //     name: 'b',
+        //     age: 20
+        // });
+        var request = objectStore.get(1);
+    }
+    indexedDB.upgradeneeded = function (e) {
+        console.log(e);
+        var db = e.srcElement.result;
+        if (!db.objectStoreNames.contains('person')) {
+            let objStore = db.createObjectStore('person', {
+                keyPath: 'id',
+                autoIncrement: true
+            }); // 新建表名为person的表，主键为id
+            objStore.createIndex('name', 'name', {
+                unique: false
+            })
+            objStore.createIndex('email', 'email', {
+                unique: true
+            })
+            // for (let i in customerData) {
+            //     objStore.add(customerData[i])
+            // }
+            var request = db.transaction(['person'], 'readwrite')
+                .objectStore('person')
+                .add({
+                    id: 1,
+                    name: '张三',
+                    age: 24,
+                    email: 'zhangsan@example.com'
+                });
+            request.onsuccess = function () {
+                console.log('success~~~');
+
+            }
+        }
+    }
+
+    // function addData() {
+    //     var request = db.transaction(['person'], 'readwrite')
+    //     .objectStore('person')
+    //     .add({
+    //         id: 1,
+    //         name: '张三',
+    //         age: 24,
+    //         email: 'zhangsan@example.com'
+    //     });
+    //     request.onsuccess = function() {
+    //         console.log('success~~~');
+
+    //     }
+    // }
+    // addData()
+</script>
+
+</html>

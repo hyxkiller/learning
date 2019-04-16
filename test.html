@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    function symbols(sign1, sign2, str) {
+        if (typeof str == "string") {
+            var arr = [];
+            for (var i = 0; i < str.length; i++) {
+                if (str[i] == sign1) {
+                    arr.push(str[i])
+                }
+            }
+            for (var j = 0; j < str.length; j++) {
+                if (str[j] == sign2) {
+                    arr.pop()
+                }
+            }
+            if (arr.length === 0) {
+                return true
+            } else {
+                return false
+            }
+        } else {
+            return '不是字符串'
+        }
+    }
+    console.log(symbols('(', ')', '()()sfsf'))
+</script>
+
+</html>
