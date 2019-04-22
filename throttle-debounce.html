@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>throttle-debounce</title>
+</head>
+<body>
+    <h2>防抖</h2>
+    <button>click</button>
+    <p>0</p>
+    <hr />
+    <h2>节流</h2>
+    <button>click</button>
+    <p>0</p>
+    <script>
+        window.onload = function(){
+            document.getElementsByTagName("button")[0].addEventListener("click",debounce(addDe,500) );
+            document.getElementsByTagName("button")[1].addEventListener("click",throttle(addTh,500) );
+            var pde = document.getElementsByTagName("p")[0];
+            var pth = document.getElementsByTagName("p")[1];
+            function addDe(){
+                pde.innerText = +pde.innerText + 1;
+            }
+            function addTh(){
+                pth.innerText = +pth.innerText + 1;
+            }
+            function debounce(fn,delay){
+                var a;
+                return function(){
+                    clearTimeout(a);
+                    a = setTimeout(function() {
+                        fn();
+                    }, delay);
+                }
+            }
+            function throttle(fn,delay){
+                var stime = 0 , etime;
+                return function(){
+                    etime = new Date().getTime();
+                    var time = etime - stime;
+                    stime = etime;
+                    if(time > delay) fn();
+                }
+            }
+        }
+    </script>
+</body>
+</html>
