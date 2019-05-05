@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<title>Document</title>
+	<style>
+		* {
+			padding: 0;
+			margin: 0;
+		}
+
+		#canvas {
+			background: #000;
+		}
+
+		ul {
+			position: fixed;
+			z-index: 10;
+			bottom: 0;
+			left: 0;
+			width: 10%;
+			height: 20px;
+			background: #fff;
+			cursor: pointer;
+		}
+
+		ul li {
+			float: left;
+			list-style: none;
+			width: 50%;
+			text-align: center;
+		}
+	</style>
+</head>
+
+<body>
+	<canvas id="canvas"></canvas>
+	<ul>
+		<li>橡皮</li>
+		<li>画笔</li>
+	</ul>
+</body>
+<script>
+	document.querySelector('ul').addEventListener('click', (e) => {
+		if (e.target.nodeName.toLowerCase() == 'li') {
+			switch (e.target.innerText) {
+				case '橡皮':
+					changeToRaser(e);
+					break;
+				case '画笔':
+					changeToPen(e);
+					break;
+			}
+		}
+	})
+
+	changeToPen = () => {
+		type = 'write';
+	}
+
+	changeToRaser = (e) => {
+		type = 'clear';
+	}
+
+	let canvas = document.getElementById('canvas'),
+		context = canvas.getContext('2d'),
+		WIDTH = document.documentElement.clientWidth,
+		HEIGHT = document.documentElement.clientHeight,
+		item = {
+			num: 100,
+			color: false,
+			r: 0.9,
+			dispear: 0.09,         // 判断圆消失的条件，数值越大，消失的越快
+		},
+		color,
+		color2,
+		round = [],
+		type = 'write';
+	canvas.width = WIDTH;
+	canvas.height = HEIGHT;
+
+	window.addEventListener('mousemove', function (e) {
+		mouseX = e.clientX;
+		mouseY = e.clientY;
+		switch (type) {
+			case 'write':
+				round.push({
+					mouseX,
+					mouseY,
+					r: item.r,
+					dispear: 1
+				});
+				break;
+			case 'clear':
+				context.clearRect(mouseX - item.r / 2, mouseY - item.r / 2, 10, 10);
+		}
+	})
+
+	if (item.color) {
+		color2 = item.color;
+	} else {
+		color = Math.random() * 360;
+	}
+
+	function animate() {
+		if (!item.color) {
+			color += .1;
+			color2 = `hsl(${color}, 100%, 80%)`;
+		}
+		for (let i = 0; i < round.length; i++) {
+			context.fillStyle = color2;
+			context.beginPath();
+			context.arc(round[i].mouseX, round[i].mouseY, round[i].r, 0, Math.PI * 2);
+			context.closePath();
+			context.fill();
+			round[i].r += item.r;
+			round[i].dispear -= item.dispear;
+			if (round[i].dispear <= 0) {
+				round.splice(i, 1);
+				i--;
+			}
+		}
+		requestAnimationFrame(animate);
+	}
+
+	animate();
+
+</script>
+
+</html>

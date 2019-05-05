@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: black;
+            /* cursor: none; */
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id='canvas'></canvas>
+</body>
+<script>
+    let canvas = document.getElementById('canvas'),
+        context = canvas.getContext('2d'),
+        WIDTH = document.documentElement.clientWidth,
+        HEIGHT = document.documentElement.clientHeight,
+        round = [],
+        initRoundPopulation = 80;
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+
+    function roundItem(index, x, y) {
+        this.index = index;
+        this.x = x;
+        this.y = y;
+        this.r = Math.random() * 2 + 1;
+        let alpha = (Math.floor(Math.random() * 10) + 1) / 10 / 2;
+        this.color = `rgba(255, 255, 255, ${alpha})`;
+    }
+
+    roundItem.prototype.draw = function () {
+        context.fillStyle = this.color;
+        context.shadowBlur = this.r * 2;
+        context.beginPath();
+        context.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
+        context.closePath();
+        context.fill();
+    }
+    roundItem.prototype.move = function () {
+        this.y += 0.2;
+        if (this.y >= HEIGHT + 2) {
+            this.y = -2;
+        }
+        this.draw();
+    }
+
+    function animate() {
+        context.clearRect(0, 0, WIDTH, HEIGHT);
+        for (let i in round) {
+            round[i].move();
+        }
+        requestAnimationFrame(animate);
+    }
+
+    function init() {
+        for (let i = 0; i < initRoundPopulation; i++) {
+            round[i] = new roundItem(i, Math.random() * WIDTH, Math.random() * HEIGHT);
+            round[i].draw();
+        }
+        animate();
+    }
+
+    init();
+</script>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        html{
+            width: 100%;
+            height: 100%;
+            /* background-image: url(https://user-gold-cdn.xitu.io/2017/11/29/160084b6848b6144?imageView2/0/w/1280/h/960/format/webp/ignore-error/1); */
+            background: linear-gradient(to bottom, #000000 0%,#5788fe 100%);
+            /* background-repeat: no-repeat; */
+        }
+        body{
+            width: 100%;
+            height: 100%;
+        }
+        .filter {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #fe5757;
+            animation: colorChange 3s ease-in-out infinite;
+            animation-fill-mode: both;
+            /* 混合模式 */
+            mix-blend-mode: overlay; 
+        }
+
+        @keyframes colorChange {
+            0%, 100% {
+                opacity: 0;
+            }
+            50% {
+                opacity: .9;
+            }
+        }
+    </style>
+</head>
+<body>
+    <img src="https://user-gold-cdn.xitu.io/2017/11/29/160084b6848b6144?imageView2/0/w/1280/h/960/format/webp/ignore-error/1" alt="">
+    <div class="filter"></div>
+</body>
+</html>

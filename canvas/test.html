@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #canvas,
+        #canvas2 {
+            background: #000;
+            /* width: 600px;
+            height: 600px; */
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <canvas id="canvas" ></canvas> -->
+    <canvas id="canvas" width="600" height="600"></canvas>
+    <canvas id="canvas2" width="600" height="600"></canvas>
+</body>
+<script>
+    let canvas = document.getElementById('canvas');
+    let context = canvas.getContext('2d');
+    // canvas.width = 600;
+    // canvas.height = 600;
+
+    // 实心圆
+    context.beginPath();
+    context.arc(60, 60, 50, 0, Math.PI * 2, false);
+    context.closePath();
+    context.fillStyle = '#fff';
+    context.shadowBlur = 10;
+    context.shadowColor = 'blue';
+    // context.shadowOffsetX=10;
+    // context.shadowOffsetY=10;
+    context.fill();
+
+    // 圆线
+    context.beginPath();
+    context.arc(60, 180, 50, 0, Math.PI * 1.5, false);
+    context.closePath();
+    context.strokeStyle = '#fff';
+    context.stroke();
+
+    // 线
+    context.beginPath();
+    context.moveTo(200, 300);
+    context.lineTo(350, 300);
+    context.lineTo(250, 200);
+    context.lineTo(250, 350);
+    context.lineCap = 'round';
+    context.lineWidth = 10;
+    context.lineJoin = 'bevel';
+    context.strokeStyle = '#fff';
+    context.stroke();
+
+    // 实心/空心矩形
+    context.beginPath();
+    context.fillStyle = '#fff';
+    context.fillRect(160, 10, 100, 100);
+    context.strokeStyle = 'red';
+    context.strokeRect(270, 10, 100, 100);
+
+    // 渐变色
+    let grd = context.createLinearGradient(0, 100, 0, 400);
+    grd.addColorStop(0, '#fff');
+    grd.addColorStop(0.5, '#999');
+    grd.addColorStop(1, '#000');
+    context.fillStyle = grd;
+    context.fillRect(50, 250, 50, 250);
+
+    let canvas2 = document.getElementById('canvas2');
+    let context2 = canvas2.getContext('2d');
+    // 旋转
+    context2.rotate(Math.PI / 180 * -30);
+    // 缩放
+    context2.strokeStyle = '#fff';
+    context2.strokeRect(30, 40, 30, 30);
+    context2.scale(2, 2);
+    context2.strokeRect(30, 40, 30, 30);
+
+    // save restore
+    context.strokeStyle = 'yellow';
+    context.lineWidth = 5;
+    context.save(); // 保存了两个状态
+
+    context.beginPath();
+    context.strokeStyle='green';
+    context.lineWidth=10;    
+    context.moveTo(200, 400);
+    context.lineTo(300, 400);
+    context.stroke();
+    context.closePath();
+    
+    context.restore(); // 恢复上面两个状态
+    context.beginPath();
+    context.moveTo(200, 420);
+    context.lineTo(300, 420);
+    context.stroke();
+    context.closePath();
+
+</script>
+
+</html>
