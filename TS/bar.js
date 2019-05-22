@@ -1,4 +1,17 @@
 "use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 exports.__esModule = true;
 var foo_1 = require("./foo");
 var bar;
@@ -20,6 +33,8 @@ console.log("\u51FD\u6570\u521D\u8BC6:" + test(11));
 var arr = [true];
 var rand;
 rand = [true, 1, 'haha'];
+var list1 = [1, 2, 3];
+var list2 = [1, 2, 3];
 var home = {
     mom: 'Lily',
     dad: 'james',
@@ -28,6 +43,11 @@ var home = {
     merry: true
 };
 console.log(home);
+function log1(a) {
+    console.log(a.a);
+}
+var he = { a: 'hello', b: 0 };
+log1(he);
 // 泛型
 function generic(arr) {
     arr.forEach(function (item) {
@@ -50,7 +70,7 @@ console.log("\u8054\u5408\u7C7B\u578B:" + joint('hello'));
 // 交叉类型
 // 元组类型
 var name;
-name = ['hello', 123];
+name = ['hello', 123, true];
 // 枚举
 var CardSuit;
 (function (CardSuit) {
@@ -68,3 +88,90 @@ var card = CardSuit.diamonds;
 console.log("\u679A\u4E3E:" + card);
 var simple = function (foo) { return foo.toString(); };
 console.log(typeof simple(1));
+// declare function create(o: object | null): void;
+// create({ 0: 0 });
+// create(null);
+// 类型断言
+var a = 'string';
+// let b: number = (<string>a).length;
+var b = a.length;
+console.log(b);
+var mySearch;
+mySearch = function (src, sub) {
+    var result = src.search(sub);
+    return result > -1;
+};
+// 索引类型
+var Animal = /** @class */ (function () {
+    function Animal() {
+    }
+    return Animal;
+}());
+var Dog = /** @class */ (function (_super) {
+    __extends(Dog, _super);
+    function Dog() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return Dog;
+}(Animal));
+var square = {};
+square.color = 'red';
+square.side = 10;
+square.width = 5;
+function getCounter() {
+    var counter = (function (start) {
+    });
+    counter.interval = 123;
+    counter.reset = function () {
+    };
+    return counter;
+}
+var c = getCounter();
+c(10);
+c.reset();
+c.interval = 5;
+// 接口继承类
+// 类
+var Fruits = /** @class */ (function () {
+    function Fruits(m) {
+        this.name = m;
+    }
+    Fruits.prototype.eat = function (num) {
+        console.log("I have eat " + num);
+    };
+    return Fruits;
+}());
+var Apple = /** @class */ (function (_super) {
+    __extends(Apple, _super);
+    function Apple(name) {
+        return _super.call(this, name) || this;
+    }
+    Apple.prototype.eat = function (num) {
+        if (num === void 0) { num = 1; }
+        console.log("delicious");
+        _super.prototype.eat.call(this, num);
+    };
+    return Apple;
+}(Fruits));
+var apple = new Apple('apple');
+apple.eat(10);
+var Person = /** @class */ (function () {
+    function Person(name) {
+        this.name = name;
+    }
+    return Person;
+}());
+var Employee = /** @class */ (function (_super) {
+    __extends(Employee, _super);
+    function Employee(name, department) {
+        var _this = _super.call(this, name) || this;
+        _this.department = department;
+        return _this;
+    }
+    Employee.prototype.getElevator = function () {
+        return this.name + " " + this.department;
+    };
+    return Employee;
+}(Person));
+var curry = new Employee('Curry', 'Sales');
+console.log(curry.getElevator());
