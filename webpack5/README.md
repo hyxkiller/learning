@@ -1,0 +1,1 @@
++ optimization的moduleIds，chunkIds新增'deterministic'属性，给每个文件固定id，便于文件更新管理
