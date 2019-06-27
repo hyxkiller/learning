@@ -38,7 +38,7 @@ let select = function (arr) {
 console.log('select', select(arr));
 
 /**
- * 选择排序
+ * 快速排序
  * @param {Array} arr 
  */
 let quick = function (arr) {
