@@ -56,7 +56,7 @@ function generic<T>(arr: T[]): T[] {
 let Arr = [1, 2, 3];
 console.log(`泛型:${generic<number>(Arr)}`);
 
-// 联合类型
+// 联合类型(几种类型之一)
 function joint(type: string | number): string {
     if (typeof type === 'string') {
         return `字符串${type}`;
@@ -66,8 +66,41 @@ function joint(type: string | number): string {
 }
 console.log(`联合类型:${joint('hello')}`);
 
-// 交叉类型
+// 交叉类型(几种类型之和)
+function extend<T, U>(firsrt: T, second: U): T & U {
+    let result = {} as T & U;
+    for(let id in firsrt){
+        result[id] = firsrt[id] as any;
+    }
+    for(let id in second){
+        if(!result.hasOwnProperty(id)){
+            result[id] = second[id] as any;
+        }
+    }
+    return result;
+}
 
+// 类型保护
+interface Bird {
+    fly(): any
+    layEggs(): any
+}
+interface Fish{
+    swim(): any
+    layEggs(): any
+}
+function getSmallPet(): Fish | Bird {
+    // ...
+}
+let pet = getSmallPet();
+if(isFish(pet)){
+    pet.swim();
+}else{
+    pet.fly();
+}
+function isFish(pet: Fish | Bird): pet is Fish {
+    return (pet as Fish).swim !== undefined;
+}
 
 // 元组类型
 let name: [string, number, boolean];
@@ -159,23 +192,21 @@ c(10);
 c.reset();
 c.interval = 5;
 
-// 接口继承类
-
 // 类
 class Fruits {
     name: string
-    constructor(m: string){
+    constructor(m: string) {
         this.name = m;
     }
     eat(num: number) {
-        console.log(`I have eat ${num}`);
+        console.log(`I have eat ${num} ${this.name}`);
     }
 }
 class Apple extends Fruits {
-    constructor(name: string){
+    constructor(name: string) {
         super(name)
     }
-    eat(num: number = 1){
+    eat(num: number = 1) {
         console.log(`delicious`);
         super.eat(num);
     }
@@ -185,13 +216,13 @@ apple.eat(10);
 
 class Person {
     protected name: string;
-    constructor(name: string){
+    constructor(name: string) {
         this.name = name;
     }
 }
 class Employee extends Person {
     private department: string;
-    constructor(name: string, department: string){
+    constructor(name: string, department: string) {
         super(name)
         this.department = department;
     }
@@ -201,3 +232,48 @@ class Employee extends Person {
 }
 let curry = new Employee('Curry', 'Sales');
 console.log(curry.getElevator());
+
+class People {
+    private _fullName: string = '';
+    get fullName(): string {
+        return this._fullName;
+    }
+    set fullName(name: string) {
+        this._fullName = name;
+    }
+}
+let people = new People();
+people.fullName = 'hyx';
+console.log(people.fullName);
+
+abstract class Department {
+    name: string;
+    constructor(n: string) {
+        this.name = n;
+    }
+    pritName(): void {
+        console.log(this.name);
+    }
+    abstract printMeeting(): void;
+}
+
+class AccountDepartment extends Department {
+    constructor() {
+        super('account');
+    }
+    printMeeting(): void {
+        console.log('抽象方法')
+    }
+    sleep(): void {
+        console.log('sleep');
+    }
+}
+let account: Department = new AccountDepartment();
+account.printMeeting();
+account.pritName();
+
+// 函数
+let add: (a: number, b?: number) => number = function (x: number, y?: number): number {
+    return x + y;
+}
+console.log(add(1));

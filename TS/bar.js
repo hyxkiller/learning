@@ -68,6 +68,18 @@ function joint(type) {
 }
 console.log("\u8054\u5408\u7C7B\u578B:" + joint('hello'));
 // 交叉类型
+function extend(firsrt, second) {
+    var result = {};
+    for (var id in firsrt) {
+        result[id] = firsrt[id];
+    }
+    for (var id in second) {
+        if (!result.hasOwnProperty(id)) {
+            result[id] = second[id];
+        }
+    }
+    return result;
+}
 // 元组类型
 var name;
 name = ['hello', 123, true];
@@ -130,14 +142,13 @@ var c = getCounter();
 c(10);
 c.reset();
 c.interval = 5;
-// 接口继承类
 // 类
 var Fruits = /** @class */ (function () {
     function Fruits(m) {
         this.name = m;
     }
     Fruits.prototype.eat = function (num) {
-        console.log("I have eat " + num);
+        console.log("I have eat " + num + " " + this.name);
     };
     return Fruits;
 }());
@@ -175,3 +186,52 @@ var Employee = /** @class */ (function (_super) {
 }(Person));
 var curry = new Employee('Curry', 'Sales');
 console.log(curry.getElevator());
+var People = /** @class */ (function () {
+    function People() {
+        this._fullName = '';
+    }
+    Object.defineProperty(People.prototype, "fullName", {
+        get: function () {
+            return this._fullName;
+        },
+        set: function (name) {
+            this._fullName = name;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return People;
+}());
+var people = new People();
+people.fullName = 'hyx';
+console.log(people.fullName);
+var Department = /** @class */ (function () {
+    function Department(n) {
+        this.name = n;
+    }
+    Department.prototype.pritName = function () {
+        console.log(this.name);
+    };
+    return Department;
+}());
+var AccountDepartment = /** @class */ (function (_super) {
+    __extends(AccountDepartment, _super);
+    function AccountDepartment() {
+        return _super.call(this, 'account') || this;
+    }
+    AccountDepartment.prototype.printMeeting = function () {
+        console.log('抽象方法');
+    };
+    AccountDepartment.prototype.sleep = function () {
+        console.log('sleep');
+    };
+    return AccountDepartment;
+}(Department));
+var account = new AccountDepartment();
+account.printMeeting();
+account.pritName();
+// 函数
+var add = function (x, y) {
+    return x + y;
+};
+console.log(add(1));
