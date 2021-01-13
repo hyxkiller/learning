@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>bigfile_upload</title>
+</head>
+<body>
+  <div>
+    <input type="file" onchange="handleFileChange(event)" />
+    <button onclick="handleUpload()">上传</button>
+  </div>
+</body>
+<script>
+  const SLICE_LENGTH = 10
+  let selectFile, data
+  const request = ({url, method = 'post', data, headers = {}, requestList}) => {
+    return new Promise(resolve => {
+      const xhr = new XMLHttpRequest()
+      xhr.open(method, url)
+      Object.keys(headers).forEach(k => {
+        xhr.setRequestHeader(k, headers[k])
+      })
+      xhr.send(data)
+      xhr.onload = data => {
+        resolve({ data })
+      }
+    })
+  }
+
+  const handleFileChange = (e) => {
+    const [file] = e.target.files
+    selectFile = file
+  }
+  const handleUpload = async () => {
+    if (!selectFile) return;
+    const fileChunkList = createFileChunk(selectFile);
+    data = fileChunkList.map(({ file }, index) => ({
+      chunk: file,
+      hash: selectFile.name + "-" + index // 文件名 + 数组下标
+    }));
+    await uploadChunks();
+  }
+
+  // 生成文件切片
+  const createFileChunk = (file, length = SLICE_LENGTH) => {
+    const fileChunkList = []
+    const chunkSize = Math.ceil(file.size / length)
+    let cur = 0
+    while(cur < file.size) {
+      fileChunkList.push({ file: file.slice(cur, cur + chunkSize) })
+      cur += chunkSize
+    }
+    return fileChunkList
+  }
+
+  // 上传切片
+  const uploadChunks = async () => {
+    const requestList = data
+      .map(({ chunk, hash }) => {
+        const formData = new FormData();
+        formData.append("chunk", chunk);
+			  formData.append("hash", hash);
+        formData.append("filename", selectFile.name);
+        return { formData };
+      })
+      .map(async ({ formData }) =>
+        request({
+          url: "http://localhost:3000/",
+          data: formData
+        })
+      );
+    await Promise.all(requestList); // 并发切片
+    await mergeRequest()
+  }
+
+  // 合并请求
+  const mergeRequest = async () => {
+    await request({
+      url: "http://localhost:3000/merge",
+      headers: {
+        "content-type": "application/json"
+      },
+      data: JSON.stringify({
+        filename: selectFile.name
+      })
+    });
+  }
+
+</script>
+</html>
