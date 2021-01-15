@@ -2,16 +2,20 @@ const obj = { name: 'haha' }
 // Proxy代理的情况下，目标对象内部的this关键字会指向Proxy代理」
 const proxy = new Proxy(obj, {
   get(target, k) {
-    return target[k]
+    // return target[k]
+    return Reflect.get(target, k)
   },
   set(target, k, val) {
-    return target[k] = val
+    // return target[k] = val
+    return Reflect.set(target, k, val)
   },
   has(target, k) {
-    return k in target
+    // return k in target
+    return Reflect.has(target, k)
   },
   deleteProperty(target, k) {
-    return delete [target, k]
+    // return delete target[k]
+    return Reflect.deleteProperty(target, k)
   },
   ownKeys(target) {
     // 返回数组才有效，且数组中只能是字符串或者Symbol
@@ -65,9 +69,9 @@ proxy.na = '111'
 console.log(proxy.na); // 111
 console.log('na' in proxy); // true
 console.log(delete proxy['na']); // true
-console.log(Object.keys(proxy)); // [ 'name' ]
+console.log(Object.keys(proxy)); //   []
 console.log(Object.getOwnPropertyNames(proxy)); // [ 'asd', 'name', 'addd' ]
 console.log(Object.getOwnPropertySymbols(proxy)); // [ Symbol(1) ]
-console.log(Object.getOwnPropertyDescriptor(proxy, 'name')); // { value: 'papa', writable: true, enumerable: true, configurable: true }
-console.log(Object.defineProperty(proxy, 'name', {})); // { name: 'papa' }
-console.log(Object.getPrototypeOf(proxy)); // { name: 'papa', na: '111' }
+console.log(Object.getOwnPropertyDescriptor(proxy, 'name')); // undefined
+console.log(Object.defineProperty(proxy, 'name', {})); // {}
+console.log(Object.getPrototypeOf(proxy)); // {}
