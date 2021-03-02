@@ -50,11 +50,14 @@ const proxy = new Proxy(obj, {
     return true
   },
   apply(target, ctx, args) {
+    // apply方法拦截函数的调用、call、apply操作
+    // target：目标对象，ctx：目的对象的上下文对象，args：目标对象的参数数组
     console.log(target, ctx, args);
     return 'kaka'
   },
   construct(target, args) {
     // 必须返回对象
+    // 拦截new命令
     console.log(target, args);
     return { a: 1 }
   }
@@ -75,3 +78,29 @@ console.log(Object.getOwnPropertySymbols(proxy)); // [ Symbol(1) ]
 console.log(Object.getOwnPropertyDescriptor(proxy, 'name')); // undefined
 console.log(Object.defineProperty(proxy, 'name', {})); // {}
 console.log(Object.getPrototypeOf(proxy)); // {}
+
+var handler = {
+  get: function(target, name) {
+    if (name === 'prototype') {
+      return Object.prototype;
+    }
+    return 'Hello, ' + name;
+  },
+
+  apply: function(target, thisBinding, args) {
+    return args[0];
+  },
+
+  construct: function(target, args) {
+    return {value: args[1]};
+  }
+};
+
+var fproxy = new Proxy(function(x, y) {
+  return x + y;
+}, handler);
+
+fproxy(1, 2) // 1 （函数调用，走apply）
+new fproxy(1, 2) // {value: 2}  （new 走 construct）
+fproxy.prototype === Object.prototype // true
+fproxy.foo === "Hello, foo" // true
